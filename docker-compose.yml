@@ -29,3 +29,17 @@ services:
     depends_on:
       - mysql
 
+  web:
+    build: ./web
+    container_name: web-ui
+    environment:
+      API_BASE: http://api:8500
+      APP_USER: ${APP_USER:-admin}
+      APP_PASSWORD: ${APP_PASSWORD:-password}
+      SECRET_KEY: ${SECRET_KEY:-changeme}
+    volumes:
+      - ./web/certs:/app/certs
+    ports:
+      - "443:443"
+    depends_on:
+      - api

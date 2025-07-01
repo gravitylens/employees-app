@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    <title>Employee Salaries</title>
+</head>
+<body>
+    <h1>Salaries for Employee {{ emp_no }}</h1>
+    <p><a href="{{ url_for('employees') }}">Back to Employees</a> | <a href="{{ url_for('logout') }}">Logout</a></p>
+    <table border="1">
+        <tr><th>Salary</th><th>From Date</th><th>To Date</th></tr>
+        {% for s in salaries %}
+        <tr>
+            <td>{{ s.salary }}</td>
+            <td>{{ s.from_date }}</td>
+            <td>{{ s.to_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

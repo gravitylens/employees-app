@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Departments</title>
+</head>
+<body>
+    <h1>Departments</h1>
+    <p><a href="{{ url_for('index') }}">Back to menu</a> | <a href="{{ url_for('logout') }}">Logout</a></p>
+    <table border="1">
+        <tr><th>ID</th><th>Name</th></tr>
+        {% for d in departments %}
+        <tr>
+            <td><a href="{{ url_for('department_detail', dept_no=d.dept_no) }}">{{ d.dept_no }}</a></td>
+            <td>{{ d.dept_name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
