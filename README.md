@@ -66,7 +66,7 @@ MYSQL_DATABASE=employees
 MYSQL_USER=your_user
 MYSQL_PASSWORD=your_password
 APP_USER=admin
-APP_PASSWORD=changeme
+APP_PASSWORD=password
 SECRET_KEY=your_secret_key
 ```
 
@@ -174,7 +174,7 @@ The web UI is served over HTTPS at `https://localhost` using self-signed certifi
 ### Logging In
 
 - **Username:** The value of `APP_USER` in your `.env` file (default: `admin`)
-- **Password:** The value of `APP_PASSWORD` in your `.env` file (default: `changeme`)
+- **Password:** The value of `APP_PASSWORD` in your `.env` file (default: `password`)
 
 After logging in, you will see a menu with links to view employees and departments.  
 - On the Employees page, click an employee number to view their salary history.
@@ -267,4 +267,4 @@ For production, consider integrating a stronger solution such as OAuth2 or conne
 ## License
 
 This project is licensed under the MIT License.  
-See individual SQL files for licensing
+test_db data obtained from https://github.com/datacharmer/test_db.git under Creative Commons License.
