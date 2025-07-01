@@ -2,6 +2,7 @@ services:
   mysql:
     image: mysql:latest
     container_name: mysql-server
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -19,6 +20,7 @@ services:
   api:
     build: ./api
     container_name: employees-api
+    restart: unless-stopped
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: ${MYSQL_USER}
@@ -32,6 +34,7 @@ services:
   web:
     build: ./web
     container_name: web-ui
+    restart: unless-stopped
     environment:
       API_BASE: http://api:8500
       APP_USER: ${APP_USER:-admin}
