@@ -1,12 +1,15 @@
 import os
 from flask import Flask, jsonify, request
 import mysql.connector
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
 def get_db_connection():
     return mysql.connector.connect(
-        host=os.environ.get('MYSQL_HOST', 'mysql'),
+        host=os.environ.get('MYSQL_HOST', 'localhost'),
         user=os.environ.get('MYSQL_USER', 'root'),
         password=os.environ.get('MYSQL_PASSWORD', ''),
         database=os.environ.get('MYSQL_DATABASE', 'employees'),
@@ -45,5 +48,9 @@ def get_departments():
     conn.close()
     return jsonify(rows)
 
+@app.route('/ping')
+def ping():
+    return "pong"
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=8500)

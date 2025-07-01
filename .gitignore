@@ -1,6 +1,9 @@
 # Ignore MySQL data directory
 data/
 
+# Ignore Python virtual environments
+.venv/
+
 # Ignore macOS system files
 .DS_Store
 
