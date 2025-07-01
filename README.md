@@ -90,6 +90,36 @@ mysql -h srv01.cyberarklabs.local -u your_user -p --ssl=0
 > **Note:**  
 > If you see hostname verification errors, use the MariaDB client or the MySQL client with `--ssl-mode=VERIFY_CA` (MySQL 5.7+/8.0+ only).
 
+## Database Contents
+
+The server loads the classic MySQL `employees` sample database.  It contains
+approximately 300k employee records and related tables describing departments,
+titles and salaries.  The main tables are:
+
+| Table name   | Description                          |
+|--------------|--------------------------------------|
+| employees    | Basic information about each employee |
+| departments  | List of company departments           |
+| dept_manager | Managers for each department          |
+| dept_emp     | Mapping between employees and departments |
+| titles       | Job titles held by each employee      |
+| salaries     | Salary history for employees          |
+
+## Running the Containers
+
+Start both the MySQL server and the REST API:
+
+```bash
+docker-compose up -d
+```
+
+The API will be available at `http://localhost:5000`.
+
+## Stopping the Containers
+
+```bash
+docker-compose down
+
 ### User Permissions
 
 Ensure your MySQL user is allowed to connect from remote hosts (not just `localhost`).  
@@ -125,4 +155,5 @@ FLUSH PRIVILEGES;
 
 ## License
 
+This project is licensed under the MIT License.
 See individual SQL files for licensing
