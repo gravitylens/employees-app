@@ -1,6 +1,8 @@
 # MySQL Server Project
 
-This project sets up an empty MySQL server using Docker. Below are the instructions to get started.
+This project sets up a MySQL server containing the classic `employees` sample
+database.  It also provides a simple REST API so that the data can be consumed
+by other applications.
 
 ## Prerequisites
 
@@ -43,11 +45,34 @@ This project sets up an empty MySQL server using Docker. Below are the instructi
    - Password: `your_password`
    - Database: `your_database_name`
 
-## Stopping the Server
+## Database Contents
 
-To stop the MySQL server, run:
+The server loads the classic MySQL `employees` sample database.  It contains
+approximately 300k employee records and related tables describing departments,
+titles and salaries.  The main tables are:
 
+| Table name   | Description                          |
+|--------------|--------------------------------------|
+| employees    | Basic information about each employee |
+| departments  | List of company departments           |
+| dept_manager | Managers for each department          |
+| dept_emp     | Mapping between employees and departments |
+| titles       | Job titles held by each employee      |
+| salaries     | Salary history for employees          |
+
+## Running the Containers
+
+Start both the MySQL server and the REST API:
+
+```bash
+docker-compose up -d
 ```
+
+The API will be available at `http://localhost:5000`.
+
+## Stopping the Containers
+
+```bash
 docker-compose down
 ```
 

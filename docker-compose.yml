@@ -16,3 +16,16 @@ services:
       - ./certs/ca.pem:/var/lib/mysql/ca.pem
       - ./certs/server-cert.pem:/var/lib/mysql/server-cert.pem
       - ./certs/server-key.pem:/var/lib/mysql/server-key.pem
+  api:
+    build: ./api
+    container_name: employees-api
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+
