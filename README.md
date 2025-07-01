@@ -1,6 +1,6 @@
-# MySQL Sample Docker Environment
+# Employee Database App
 
-This project provides a ready-to-use MySQL environment with sample data, SSL support, and remote access using Docker Compose.
+This project provides a ready-to-use application with MySQL, sample data, a RestAPI, and a basic WebUI.
 
 ## Features
 
@@ -9,6 +9,8 @@ This project provides a ready-to-use MySQL environment with sample data, SSL sup
 - SSL/TLS enabled with custom certificates
 - Remote access enabled (binds to all interfaces)
 - Data persisted in a local `data/` directory
+- RestAPI
+- Web UI
 
 ## Prerequisites
 
