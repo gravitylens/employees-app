@@ -1,11 +1,13 @@
-# MySQL Sample Docker Environment
+# Employees App Docker Environment
 
-This project provides a ready-to-use MySQL environment with sample data, SSL support, and remote access using Docker Compose.
+  This project provides a ready-to-use MySQL environment with sample data, a REST API, and a web UI, all running in Docker containers with SSL support and remote access.  This application intentionally uses self-signed certificates and exposed secrets to create a training environment in which we can remediate those issues using CyberArk Secrets Manager and CyberArk Certificate Manager.
 
 ## Features
 
 - MySQL server in a Docker container
 - Sample database and data loaded automatically
+- REST API for employee data
+- Flask-based web UI
 - SSL/TLS enabled with custom certificates
 - Remote access enabled (binds to all interfaces)
 - Data persisted in a local `data/` directory
@@ -15,6 +17,7 @@ This project provides a ready-to-use MySQL environment with sample data, SSL sup
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [Docker Compose](https://docs.docker.com/compose/)
 - MySQL or MariaDB client (for connecting remotely)
+- Python 3.8+ (for running API test scripts)
 
 ## Setup
 
@@ -22,13 +25,12 @@ This project provides a ready-to-use MySQL environment with sample data, SSL sup
 
 ```sh
 git clone <repo-url>
-cd mysql-sample
+cd employees-app
 ```
 
 ### 2. Generate SSL Certificates
 
-If not already present, generate SSL certificates in the `certs/` directory for
-MySQL and in `web/certs/` for the web UI:
+If not already present, generate SSL certificates in the `certs/` directory for MySQL and in `web/certs/` for the web UI:
 
 ```sh
 mkdir -p certs
@@ -61,6 +63,9 @@ MYSQL_ROOT_PASSWORD=your_root_password
 MYSQL_DATABASE=employees
 MYSQL_USER=your_user
 MYSQL_PASSWORD=your_password
+APP_USER=admin
+APP_PASSWORD=changeme
+SECRET_KEY=your_secret_key
 ```
 
 ### 4. Start the Containers
@@ -71,36 +76,116 @@ docker-compose up -d
 
 The server will initialize, load the sample data, and be ready for remote connections.
 
-## Connecting Remotely
+---
 
-### Using the MySQL Client
+## REST API Documentation
 
-**With SSL (recommended):**
+The REST API is served by the Flask app at `http://localhost:8500`.
 
-```sh
-mysql -h srv01.cyberarklabs.local -u your_user -p --ssl-ca=./certs/ca.pem
+### Endpoints
+
+#### `GET /employees`
+Returns a list of employees.  
+**Query Parameters:**
+- `limit` (optional): Number of employees to return (default: 10)
+
+**Example:**
+```
+GET http://localhost:8500/employees?limit=5
 ```
 
-**With MariaDB Client:**
+#### `GET /employees/<emp_no>`
+Returns details for a specific employee.
 
-```sh
-mysql -h srv01.cyberarklabs.local -u your_user -p --ssl --ssl-ca=./certs/ca.pem
+**Example:**
+```
+GET http://localhost:8500/employees/10001
 ```
 
-**Without SSL (not recommended for production):**
+#### `GET /employees/<emp_no>/salaries`
+Returns salary history for a specific employee.
 
-```sh
-mysql -h srv01.cyberarklabs.local -u your_user -p --ssl=0
+**Example:**
+```
+GET http://localhost:8500/employees/10001/salaries
 ```
 
-> **Note:**  
-> If you see hostname verification errors, use the MariaDB client or the MySQL client with `--ssl-mode=VERIFY_CA` (MySQL 5.7+/8.0+ only).
+#### `GET /departments`
+Returns all departments.
+
+**Example:**
+```
+GET http://localhost:8500/departments
+```
+
+#### `GET /departments/<dept_no>`
+Returns department details, manager, and employees.
+
+**Example:**
+```
+GET http://localhost:8500/departments/d005
+```
+
+#### `GET /salaries/<emp_no>`
+Returns salary records for a specific employee (alternative to `/employees/<emp_no>/salaries`).
+
+**Example:**
+```
+GET http://localhost:8500/salaries/10001
+```
+
+#### `GET /orgchart`
+Returns a list of departments and their current managers.
+
+**Example:**
+```
+GET http://localhost:8500/orgchart
+```
+
+---
+
+## Testing the API
+
+A test script is provided in `api/test_api.py` to quickly check the main endpoints.
+
+### 1. Install dependencies
+
+```sh
+cd api
+pip install -r requirements.txt
+```
+
+### 2. Run the test script
+
+```sh
+python test_api.py
+```
+
+You can edit `test_api.py` to test additional endpoints or change parameters.
+
+---
+
+## Web UI
+
+The web UI is served over HTTPS at `https://localhost` using self-signed certificates in `web/certs/`.
+
+### Logging In
+
+- **Username:** The value of `APP_USER` in your `.env` file (default: `admin`)
+- **Password:** The value of `APP_PASSWORD` in your `.env` file (default: `changeme`)
+
+After logging in, you will see a menu with links to view employees and departments.  
+- On the Employees page, click an employee number to view their salary history.
+- On the Departments page, click a department number to view its manager and members.
+
+> **Note:** Your browser may warn about the self-signed certificate. You can safely proceed for development purposes.
+
+---
 
 ## Database Contents
 
-The server loads the classic MySQL `employees` sample database.  It contains
-approximately 300k employee records and related tables describing departments,
-titles and salaries.  The main tables are:
+The server loads the classic MySQL `employees` sample database.  
+It contains approximately 300k employee records and related tables describing departments, titles, and salaries.
 
 | Table name   | Description                          |
 |--------------|--------------------------------------|
@@ -111,29 +196,23 @@ titles and salaries.  The main tables are:
 | titles       | Job titles held by each employee      |
 | salaries     | Salary history for employees          |
 
-## Running the Containers
+---
 
-Start the MySQL server, REST API and the new web UI:
+## Running and Stopping the Containers
 
-```bash
+Start all services:
+```sh
 docker-compose up -d
 ```
 
-The API will be available at `http://localhost:8500`.
-The web UI is served over HTTPS at `https://localhost` using self-signed
-certificates located in `web/certs/`.
-After logging in you will see a simple menu with links to view the list of
-employees or the list of departments. On the Employees page you can click an
-employee number to view that employee's salary history. On the Departments
-page each department number links to a detail view showing the manager and all
-department members.
-
-## Stopping the Containers
-
-```bash
+Stop all services:
+```sh
 docker-compose down
+```
 
-### User Permissions
+---
+
+## User Permissions
 
 Ensure your MySQL user is allowed to connect from remote hosts (not just `localhost`).  
 Example SQL (run inside the container or via a client):
@@ -142,6 +221,8 @@ Example SQL (run inside the container or via a client):
 GRANT ALL PRIVILEGES ON *.* TO 'your_user'@'%' IDENTIFIED BY 'your_password';
 FLUSH PRIVILEGES;
 ```
+
+---
 
 ## File Structure
 
@@ -152,9 +233,12 @@ FLUSH PRIVILEGES;
 ├── test_db/                 # SQL files for schema and data
 ├── my.cnf                   # MySQL server configuration
 ├── web/                     # Flask based web UI
+├── api/                     # REST API source and test script
 ├── docker-compose.yml
 └── .env                     # Environment variables (not committed)
 ```
+
+---
 
 ## Troubleshooting
 
@@ -164,18 +248,21 @@ FLUSH PRIVILEGES;
 - **SSL/TLS errors:**  
   Ensure you are using the correct CA certificate and client options.
 
-- **Permission denied on certs:**
+- **Permission denied on certs:**  
   Make sure the cert files exist and have correct permissions.
+
+---
 
 ## Authentication
 
-The web UI uses a very small built-in authentication system. The default
-credentials are provided via the `APP_USER` and `APP_PASSWORD` environment
-variables. Sessions are secured using the `SECRET_KEY` environment variable.
-For production consider integrating a stronger solution such as OAuth2 or
-connecting to an external identity provider.
+The web UI uses a simple built-in authentication system.  
+Default credentials are provided via the `APP_USER` and `APP_PASSWORD` environment variables.  
+Sessions are secured using the `SECRET_KEY` environment variable.  
+For production, consider integrating a stronger solution such as OAuth2 or connecting to an external identity provider.
+
+---
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License.  
 See individual SQL files for licensing
