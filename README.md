@@ -11,6 +11,8 @@
 - SSL/TLS enabled with custom certificates
 - Remote access enabled (binds to all interfaces)
 - Data persisted in a local `data/` directory
+- RestAPI
+- Web UI
 
 ## Prerequisites
 
