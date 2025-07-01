@@ -123,7 +123,10 @@ The API will be available at `http://localhost:8500`.
 The web UI is served over HTTPS at `https://localhost` using self-signed
 certificates located in `web/certs/`.
 After logging in you will see a simple menu with links to view the list of
-employees or the list of departments.
+employees or the list of departments. On the Employees page you can click an
+employee number to view that employee's salary history. On the Departments
+page each department number links to a detail view showing the manager and all
+department members.
 
 ## Stopping the Containers
 

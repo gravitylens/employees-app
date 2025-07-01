@@ -48,6 +48,51 @@ def get_departments():
     conn.close()
     return jsonify(rows)
 
+@app.route('/departments/<dept_no>', methods=['GET'])
+def get_department_detail(dept_no):
+    """Return manager and employees for a department"""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Fetch basic department info
+    cursor.execute('SELECT dept_no, dept_name FROM departments WHERE dept_no=%s', (dept_no,))
+    dept = cursor.fetchone()
+    if not dept:
+        cursor.close()
+        conn.close()
+        return jsonify({'error': 'Department not found'}), 404
+
+    # Manager information (most recent record)
+    cursor.execute('''
+        SELECT e.emp_no, e.first_name, e.last_name
+        FROM dept_manager dm
+        JOIN employees e ON dm.emp_no = e.emp_no
+        WHERE dm.dept_no = %s
+        ORDER BY dm.to_date DESC
+        LIMIT 1
+    ''', (dept_no,))
+    manager = cursor.fetchone()
+
+    # All employees in the department (current and past)
+    cursor.execute('''
+        SELECT e.emp_no, e.first_name, e.last_name
+        FROM dept_emp de
+        JOIN employees e ON de.emp_no = e.emp_no
+        WHERE de.dept_no = %s
+        ORDER BY e.emp_no
+    ''', (dept_no,))
+    employees = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({
+        'dept_no': dept['dept_no'],
+        'dept_name': dept['dept_name'],
+        'manager': manager,
+        'employees': employees
+    })
+
 @app.route('/ping')
 def ping():
     return "pong"

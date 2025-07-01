@@ -52,12 +52,28 @@ def employees():
     return render_template('employees.html', employees=employees)
 
 
+@app.route('/employees/<int:emp_no>/salaries')
+@login_required
+def employee_salaries(emp_no):
+    resp = requests.get(f"{API_BASE}/salaries/{emp_no}")
+    salaries = resp.json() if resp.ok else []
+    return render_template('employee_salaries.html', emp_no=emp_no, salaries=salaries)
+
+
 @app.route('/departments')
 @login_required
 def departments():
     resp = requests.get(f"{API_BASE}/departments")
     departments = resp.json() if resp.ok else []
     return render_template('departments.html', departments=departments)
+
+
+@app.route('/departments/<dept_no>')
+@login_required
+def department_detail(dept_no):
+    resp = requests.get(f"{API_BASE}/departments/{dept_no}")
+    data = resp.json() if resp.ok else {}
+    return render_template('department_detail.html', dept=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=443, ssl_context=('certs/server-cert.pem', 'certs/server-key.pem'))
