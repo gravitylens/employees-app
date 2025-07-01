@@ -267,4 +267,4 @@ For production, consider integrating a stronger solution such as OAuth2 or conne
 ## License
 
 This project is licensed under the MIT License.  
-See individual SQL files for licensing
+test_db data obtained from https://github.com/datacharmer/test_db.git under Creative Commons License.
