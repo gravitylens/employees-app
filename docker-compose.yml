@@ -13,9 +13,9 @@ services:
       - ./data:/var/lib/mysql
       - ./test_db:/docker-entrypoint-initdb.d
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./certs/ca.pem:/var/lib/mysql/ca.pem
-      - ./certs/server-cert.pem:/var/lib/mysql/server-cert.pem
-      - ./certs/server-key.pem:/var/lib/mysql/server-key.pem
+      - ./certs/ca.pem:/etc/mysql/certs/ca.pem
+      - ./certs/server-cert.pem:/etc/mysql/certs/server-cert.pem
+      - ./certs/server-key.pem:/etc/mysql/certs/server-key.pem
   api:
     build: ./api
     container_name: employees-api
