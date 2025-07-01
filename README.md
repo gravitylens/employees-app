@@ -27,7 +27,8 @@ cd mysql-sample
 
 ### 2. Generate SSL Certificates
 
-If not already present, generate SSL certificates in the `certs/` directory:
+If not already present, generate SSL certificates in the `certs/` directory for
+MySQL and in `web/certs/` for the web UI:
 
 ```sh
 mkdir -p certs
@@ -44,6 +45,11 @@ openssl req -newkey rsa:2048 -days 3650 -nodes -keyout server-key.pem -out serve
 openssl x509 -req -in server-req.pem -days 3650 -CA ca.pem -CAkey ca-key.pem -set_serial 01 -out server-cert.pem
 
 cd ..
+
+# Generate a self-signed certificate for the web UI
+mkdir -p ../web/certs
+openssl req -x509 -newkey rsa:2048 -days 365 -nodes -keyout ../web/certs/server-key.pem -out ../web/certs/server-cert.pem -subj "/CN=web.local"
+cd ../..
 ```
 
 ### 3. Configure Environment Variables
@@ -57,7 +63,7 @@ MYSQL_USER=your_user
 MYSQL_PASSWORD=your_password
 ```
 
-### 4. Start the MySQL Server
+### 4. Start the Containers
 
 ```sh
 docker-compose up -d
@@ -107,13 +113,15 @@ titles and salaries.  The main tables are:
 
 ## Running the Containers
 
-Start both the MySQL server and the REST API:
+Start the MySQL server, REST API and the new web UI:
 
 ```bash
 docker-compose up -d
 ```
 
-The API will be available at `http://localhost:5000`.
+The API will be available at `http://localhost:8500`.
+The web UI is served over HTTPS at `https://localhost` using self-signed
+certificates located in `web/certs/`.
 
 ## Stopping the Containers
 
@@ -138,6 +146,7 @@ FLUSH PRIVILEGES;
 ├── data/                    # MySQL data directory (ignored by git)
 ├── test_db/                 # SQL files for schema and data
 ├── my.cnf                   # MySQL server configuration
+├── web/                     # Flask based web UI
 ├── docker-compose.yml
 └── .env                     # Environment variables (not committed)
 ```
@@ -150,8 +159,16 @@ FLUSH PRIVILEGES;
 - **SSL/TLS errors:**  
   Ensure you are using the correct CA certificate and client options.
 
-- **Permission denied on certs:**  
+- **Permission denied on certs:**
   Make sure the cert files exist and have correct permissions.
+
+## Authentication
+
+The web UI uses a very small built-in authentication system. The default
+credentials are provided via the `APP_USER` and `APP_PASSWORD` environment
+variables. Sessions are secured using the `SECRET_KEY` environment variable.
+For production consider integrating a stronger solution such as OAuth2 or
+connecting to an external identity provider.
 
 ## License
 
