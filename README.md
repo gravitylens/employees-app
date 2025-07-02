@@ -78,6 +78,18 @@ docker-compose up -d
 
 The server will initialize, load the sample data, and be ready for remote connections.
 
+### 5. If neccessary, allow access through the local firewall.
+
+```sh
+#mysql
+sudo ufw allow 3306/tcp
+
+#api
+sudo ufw allow 8500/tcp
+
+#web
+sudo ufw allow 443/tcp
+```
 ---
 
 ## REST API Documentation
