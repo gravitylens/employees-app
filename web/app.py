@@ -66,7 +66,7 @@ def login():
         pw = request.form.get('password')
         if user == APP_USER and pw == APP_PASSWORD:
             session['logged_in'] = True
-            return redirect(url_for('index'))
+            return redirect(url_for('employees'))
         return render_template('login.html', error='Invalid credentials')
     return render_template('login.html')
 
@@ -78,8 +78,8 @@ def logout():
 @app.route('/')
 @login_required
 def index():
-    """Main menu after successful login."""
-    return render_template('index.html')
+    """Redirect to the default landing page."""
+    return redirect(url_for('employees'))
 
 
 @app.route('/employees')
