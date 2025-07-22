@@ -3,6 +3,8 @@ from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 from dotenv import load_dotenv
+from datetime import datetime, date
+from email.utils import parsedate_to_datetime
 
 load_dotenv()
 
@@ -12,6 +14,42 @@ API_BASE = os.environ.get("API_BASE", "http://api:8500")
 
 APP_USER = os.environ.get("APP_USER", "admin")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "password")
+
+
+@app.template_filter('currency')
+def format_currency(value):
+    """Format a number as currency."""
+    try:
+        return f"${float(value):,.2f}"
+    except (TypeError, ValueError):
+        return value
+
+
+@app.template_filter('euro_date')
+def format_euro_date(value):
+    """Format a date as DD-Mon-YYYY (e.g., 20-May-1976)."""
+    if not value:
+        return value
+
+    # If we already have a date/datetime instance, use it directly
+    if isinstance(value, (datetime, date)):
+        dt = datetime.combine(value, datetime.min.time()) if isinstance(value, date) and not isinstance(value, datetime) else value
+    else:
+        s = str(value)
+        dt = None
+        # Try common formats returned by the API
+        for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M:%S", "%a, %d %b %Y %H:%M:%S %Z"):
+            try:
+                dt = datetime.strptime(s, fmt)
+                break
+            except ValueError:
+                continue
+        if dt is None:
+            try:
+                dt = parsedate_to_datetime(s)
+            except Exception:
+                return value
+    return dt.strftime("%d-%b-%Y")
 
 def login_required(f):
     @wraps(f)
@@ -28,7 +66,7 @@ def login():
         pw = request.form.get('password')
         if user == APP_USER and pw == APP_PASSWORD:
             session['logged_in'] = True
-            return redirect(url_for('index'))
+            return redirect(url_for('employees'))
         return render_template('login.html', error='Invalid credentials')
     return render_template('login.html')
 
@@ -40,8 +78,8 @@ def logout():
 @app.route('/')
 @login_required
 def index():
-    """Main menu after successful login."""
-    return render_template('index.html')
+    """Redirect to the default landing page."""
+    return redirect(url_for('employees'))
 
 
 @app.route('/employees')

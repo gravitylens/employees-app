@@ -188,14 +188,23 @@ The web UI is served over HTTPS at `https://localhost` using self-signed certifi
 - **Username:** The value of `APP_USER` in your `.env` file (default: `admin`)
 - **Password:** The value of `APP_PASSWORD` in your `.env` file (default: `password`)
 
-After logging in, you will see a menu with links to view employees and departments.  
-- On the Employees page, click an employee number to view their salary history.
+After logging in, you land on the Employees page.  Use the navigation links at the top to view departments or log out.
+- Click an employee number to view their salary history.
 - On the Departments page, click a department number to view its manager and members.
 
 > **Note:** Your browser may warn about the self-signed certificate. You can safely proceed for development purposes.
 
 ---
 
+## Branding
+
+The `web/static/` directory contains `logo.svg` and `styles.css`.
+Replace `logo.svg` with your own image and edit `styles.css` to change fonts,
+colors, or layout.  The stylesheet defines a few CSS variables at the top that
+control the primary font, navigation link color, and table styles.  Adjusting
+those values is usually enough to apply your own branding.  The templates
+reference these files via Flask's `static` route so updates are picked up
+automatically.
 ## Database Contents
 
 The server loads the classic MySQL `employees` sample database.  

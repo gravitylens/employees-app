@@ -1,0 +1,65 @@
+/*
+ * Basic styling for the Employees web app.
+ *
+ * To brand the app, replace `logo.svg` in this directory and
+ * tweak the CSS variables below. They control fonts and colors
+ * so you can quickly adjust the look without editing templates.
+ */
+
+:root {
+    /* Primary font used throughout the UI */
+    --font-family: Arial, sans-serif;
+
+    /* Color of navigation links */
+    --nav-link-color: #007bff;
+
+    /* Table border and header background colors */
+    --table-border-color: #ccc;
+    --table-header-bg: #f2f2f2;
+}
+
+body {
+    font-family: var(--font-family);
+    margin: 20px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header img {
+    height: 60px;
+    margin-right: 20px;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+nav a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: var(--nav-link-color);
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+table {
+    border-collapse: collapse;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+th, td {
+    border: 1px solid var(--table-border-color);
+    padding: 8px 12px;
+}
+
+th {
+    background-color: var(--table-header-bg);
+}
