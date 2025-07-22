@@ -196,6 +196,9 @@ After logging in, you will see a menu with links to view employees and departmen
 
 ---
 
+## Branding
+
+The `web/static/` directory contains `logo.svg` and `styles.css`. Replace `logo.svg` with your own image and modify `styles.css` to change fonts, colors, or layout. The templates reference these files via Flask's `static` route so updates are picked up automatically.
 ## Database Contents
 
 The server loads the classic MySQL `employees` sample database.  

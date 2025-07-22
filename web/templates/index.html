@@ -1,14 +1,10 @@
-<!doctype html>
-<html>
-<head>
-    <title>Menu</title>
-</head>
-<body>
-    <h1>Main Menu</h1>
+{% extends "layout.html" %}
+{% block title %}Menu{% endblock %}
+{% block header %}Main Menu{% endblock %}
+{% block content %}
     <p><a href="{{ url_for('logout') }}">Logout</a></p>
     <ul>
         <li><a href="{{ url_for('employees') }}">Employees</a></li>
         <li><a href="{{ url_for('departments') }}">Departments</a></li>
     </ul>
-</body>
-</html>
+{% endblock %}
