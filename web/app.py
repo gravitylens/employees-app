@@ -3,7 +3,8 @@ from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, date
+from email.utils import parsedate_to_datetime
 
 load_dotenv()
 
@@ -29,13 +30,25 @@ def format_euro_date(value):
     """Format a date as DD-Mon-YYYY (e.g., 20-May-1976)."""
     if not value:
         return value
-    if isinstance(value, datetime):
-        dt = value
+
+    # If we already have a date/datetime instance, use it directly
+    if isinstance(value, (datetime, date)):
+        dt = datetime.combine(value, datetime.min.time()) if isinstance(value, date) and not isinstance(value, datetime) else value
     else:
-        try:
-            dt = datetime.strptime(str(value), "%Y-%m-%d")
-        except ValueError:
-            return value
+        s = str(value)
+        dt = None
+        # Try common formats returned by the API
+        for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M:%S", "%a, %d %b %Y %H:%M:%S %Z"):
+            try:
+                dt = datetime.strptime(s, fmt)
+                break
+            except ValueError:
+                continue
+        if dt is None:
+            try:
+                dt = parsedate_to_datetime(s)
+            except Exception:
+                return value
     return dt.strftime("%d-%b-%Y")
 
 def login_required(f):
