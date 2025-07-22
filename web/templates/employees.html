@@ -11,7 +11,7 @@
             <td>{{ e.first_name }}</td>
             <td>{{ e.last_name }}</td>
             <td>{{ e.gender }}</td>
-            <td>{{ e.hire_date }}</td>
+            <td>{{ e.hire_date|euro_date }}</td>
         </tr>
         {% endfor %}
     </table>

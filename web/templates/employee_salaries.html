@@ -7,9 +7,9 @@
         <tr><th>Salary</th><th>From Date</th><th>To Date</th></tr>
         {% for s in salaries %}
         <tr>
-            <td>{{ s.salary }}</td>
-            <td>{{ s.from_date }}</td>
-            <td>{{ s.to_date }}</td>
+            <td>{{ s.salary|currency }}</td>
+            <td>{{ s.from_date|euro_date }}</td>
+            <td>{{ s.to_date|euro_date }}</td>
         </tr>
         {% endfor %}
     </table>

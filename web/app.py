@@ -3,6 +3,7 @@ from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -12,6 +13,30 @@ API_BASE = os.environ.get("API_BASE", "http://api:8500")
 
 APP_USER = os.environ.get("APP_USER", "admin")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "password")
+
+
+@app.template_filter('currency')
+def format_currency(value):
+    """Format a number as currency."""
+    try:
+        return f"${float(value):,.2f}"
+    except (TypeError, ValueError):
+        return value
+
+
+@app.template_filter('euro_date')
+def format_euro_date(value):
+    """Format a YYYY-MM-DD string as DD/MM/YYYY."""
+    if not value:
+        return value
+    if isinstance(value, datetime):
+        dt = value
+    else:
+        try:
+            dt = datetime.strptime(str(value), "%Y-%m-%d")
+        except ValueError:
+            return value
+    return dt.strftime("%d/%m/%Y")
 
 def login_required(f):
     @wraps(f)
