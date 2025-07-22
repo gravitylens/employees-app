@@ -26,7 +26,7 @@ def format_currency(value):
 
 @app.template_filter('euro_date')
 def format_euro_date(value):
-    """Format a YYYY-MM-DD string as DD/MM/YYYY."""
+    """Format a date as DD-Mon-YYYY (e.g., 20-May-1976)."""
     if not value:
         return value
     if isinstance(value, datetime):
@@ -36,7 +36,7 @@ def format_euro_date(value):
             dt = datetime.strptime(str(value), "%Y-%m-%d")
         except ValueError:
             return value
-    return dt.strftime("%d/%m/%Y")
+    return dt.strftime("%d-%b-%Y")
 
 def login_required(f):
     @wraps(f)
