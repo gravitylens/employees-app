@@ -2,8 +2,7 @@
 {% block title %}Employee Salaries{% endblock %}
 {% block header %}Salaries for Employee {{ emp_no }}{% endblock %}
 {% block content %}
-    <p><a href="{{ url_for('employees') }}">Back to Employees</a> | <a href="{{ url_for('logout') }}">Logout</a></p>
-    <table border="1">
+    <table>
         <tr><th>Salary</th><th>From Date</th><th>To Date</th></tr>
         {% for s in salaries %}
         <tr>

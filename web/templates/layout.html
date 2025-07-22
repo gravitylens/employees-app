@@ -9,6 +9,14 @@
     <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo">
     <h1>{% block header %}Employees App{% endblock %}</h1>
 </header>
+{% if session.get('logged_in') %}
+<nav>
+    <a href="{{ url_for('index') }}">Menu</a>
+    <a href="{{ url_for('employees') }}">Employees</a>
+    <a href="{{ url_for('departments') }}">Departments</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</nav>
+{% endif %}
 {% block content %}{% endblock %}
 </body>
 </html>
