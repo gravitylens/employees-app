@@ -1,7 +1,7 @@
 /*
  * Basic styling for the Employees web app.
  *
- * To brand the app, replace `logo.svg` in this directory and
+ * To brand the app, update the background image in this directory and
  * tweak the CSS variables below. They control fonts and colors
  * so you can quickly adjust the look without editing templates.
  */
@@ -11,27 +11,47 @@
     --font-family: Arial, sans-serif;
 
     /* Color of navigation links */
-    --nav-link-color: #007bff;
+    --nav-link-color: #f0f8ff;
 
     /* Table border and header background colors */
     --table-border-color: #ccc;
-    --table-header-bg: #f2f2f2;
+    --table-header-bg: #333366;
 }
 
 body {
     font-family: var(--font-family);
     margin: 20px;
+    padding-top: 37px;
+
+  background-color: #333366;
+  background-image: url('bg.png');
+
+  /* Keep the image from repeating */
+  background-repeat: no-repeat;
+
+  /* Scale the background image to 70% of its original size */
+  background-size: 70%;
+
+  /* Position the background at top left to show the logo */
+  background-position: top left;
+
+  /* Optional: Keep the background fixed so it doesn't scroll with the content */
+  background-attachment: fixed;
 }
 
 header {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
 }
-
+h1 {
+  color: #f26c32;
+  text-align: center;
+}
 header img {
-    height: 60px;
-    margin-right: 20px;
+    height: 117px;
+    margin-right: 434px;
 }
 
 nav {
@@ -41,25 +61,92 @@ nav {
 nav a {
     margin-right: 15px;
     text-decoration: none;
-    color: var(--nav-link-color);
+    color: #f46f31 !important;
+}
+
+nav a:visited {
+    color: #f46f31 !important;
+}
+
+nav a:link {
+    color: #f46f31 !important;
+}
+
+nav a:active {
+    color: #f46f31 !important;
 }
 
 nav a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #f46f31 !important;
+}
+
+/* All links throughout the app */
+a {
+    color: #f46f31 !important;
+    text-decoration: none !important;
+}
+
+a:visited, a:link, a:active, a:hover {
+    color: #f46f31 !important;
+    text-decoration: none !important;
 }
 
 table {
     border-collapse: collapse;
     width: auto;
     max-width: 100%;
-    margin: 0 auto;
+    margin-left: 0;
 }
-
+#Submit-form {
+	margin-left: 0;
+	margin-right: auto;    
+  width: auto;           
+  min-width: 300px;      
+  border-collapse: collapse; 
+  
+}
+#Submit-form td {
+    border: none;
+    padding: 10px 15px;
+    text-align: left;
+	background: none;
+}
+label{
+	color: #ffffff
+		; 
+}
+input{
+	background-color: #dddbdb
+}
 th, td {
-    border: 1px solid var(--table-border-color);
+    border: /* 1px solid var(--table-border-color);*/ none;
     padding: 8px 12px;
 }
 
 th {
     background-color: var(--table-header-bg);
+    color: #f46f31;
+}
+.Submit-btn {
+  margin-top: 20px;
+  background-color: #15d9e2; /* Primary Purple */
+  color: black;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;             
+  border-radius: 8px;       
+  cursor: pointer;         
+  transition: background-color 0.3s ease;
+}
+.Submit-btn:hover {
+  background-color: #07A6B4; 
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+td {
+	background: color #07A6B4;
+    color: #00f2f2;
 }

@@ -1,15 +1,16 @@
 <html><head>
     <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
+    <img src="logo7.png" alt="Logo">
     <h1>&nbsp;</h1>
     
 </header>
 <p><h1>Login</h1></p>
 
-    {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+    
   <form method="post">
 	
 		<table ID="Submit-form"><tr><td><label>Username: <input type="text" name="username"></label></td></tr>
