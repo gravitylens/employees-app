@@ -6,6 +6,7 @@
 </head>
 <body>
 <header>
+    <img src="{{ url_for('static', filename='logo7.png') }}" alt="Logo" class="logo">
     <h1>{% block header %}Employees App{% endblock %}</h1>
 </header>
 {% if session.get('logged_in') %}

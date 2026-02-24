@@ -29,11 +29,11 @@ body {
   /* Keep the image from repeating */
   background-repeat: no-repeat;
 
-  /* Scale the background image to 70% of its original size */
-  background-size: 70%;
+  /* Scale the background image to cover the full viewport */
+  background-size: cover;
 
-  /* Position the background at top left to show the logo */
-  background-position: top left;
+  /* Center the background */
+  background-position: center;
 
   /* Optional: Keep the background fixed so it doesn't scroll with the content */
   background-attachment: fixed;
@@ -42,16 +42,19 @@ body {
 header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 30px;
+    gap: 20px;
 }
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
 h1 {
   color: #f26c32;
-  text-align: center;
-}
-header img {
-    height: 117px;
-    margin-right: 434px;
+  margin: 0;
 }
 
 nav {
