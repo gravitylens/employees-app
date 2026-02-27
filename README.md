@@ -1,16 +1,17 @@
 # Employees App Docker Environment
 
-  This project provides a ready-to-use MySQL environment with sample data, a REST API, and a web UI, all running in Docker containers with SSL support and remote access.  This application intentionally uses self-signed certificates and exposed secrets to create a training environment in which we can remediate those issues using CyberArk Secrets Manager and CyberArk Certificate Manager.
+  This project provides a ready-to-use MariaDB environment with sample data, a REST API, and a web UI, all running in Docker containers with SSL support and remote access.  This application intentionally uses self-signed certificates and exposed secrets to create a training environment in which we can remediate those issues using CyberArk Secrets Manager and CyberArk Certificate Manager.
 
 ## Features
 
-- MySQL server in a Docker container
+- MariaDB server in a Docker container (compatible with MySQL)
 - Sample database and data loaded automatically
 - REST API for employee data
 - Flask-based web UI
 - SSL/TLS enabled with custom certificates
 - Remote access enabled (binds to all interfaces)
 - Data persisted in a local `data/` directory
+- Database auto-rebuild capability when data directory is empty
 - RestAPI
 - Web UI
 
@@ -235,9 +236,41 @@ docker-compose down
 
 ---
 
+## Database Reset and Rebuild
+
+If you need to reset the database and rebuild it from the initialization scripts in `test_db/`, you have two options:
+
+### Option 1: Use the Reset Script (Recommended)
+
+```sh
+./reset-database.sh
+```
+
+This script will:
+1. Stop the MariaDB container
+2. Remove all existing data files  
+3. Restart the container, which will automatically rebuild the database from `test_db/` initialization scripts
+
+### Option 2: Manual Reset
+
+```sh
+# Stop the container
+docker-compose stop mysql
+
+# Remove data directory contents
+rm -rf ./data/*
+
+# Start the container (will rebuild from test_db/)
+docker-compose up -d mysql
+```
+
+**Note:** The database will automatically rebuild from the SQL files in `test_db/` whenever the data directory is empty. This ensures you can always get back to a clean state.
+
+---
+
 ## User Permissions
 
-Ensure your MySQL user is allowed to connect from remote hosts (not just `localhost`).  
+Ensure your MariaDB user is allowed to connect from remote hosts (not just `localhost`).  
 Example SQL (run inside the container or via a client):
 
 ```sql
@@ -252,9 +285,10 @@ FLUSH PRIVILEGES;
 ```
 .
 ├── certs/                   # SSL certificates (ca.pem, server-cert.pem, server-key.pem)
-├── data/                    # MySQL data directory (ignored by git)
+├── data/                    # MariaDB data directory (ignored by git)
 ├── test_db/                 # SQL files for schema and data
-├── my.cnf                   # MySQL server configuration
+├── my.cnf                   # MariaDB server configuration
+├── reset-database.sh        # Script to reset database and rebuild from test_db/
 ├── web/                     # Flask based web UI
 ├── api/                     # REST API source and test script
 ├── docker-compose.yml
