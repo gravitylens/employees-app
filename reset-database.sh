@@ -24,7 +24,7 @@ fi
 
 echo ""
 echo "Stopping MariaDB container..."
-docker-compose stop mysql
+docker compose stop mysql
 
 echo "Removing data directory..."
 rm -rf ./data/*
@@ -34,7 +34,7 @@ echo "Note: Keeping the data directory structure"
 echo ""
 echo "Starting MariaDB container..."
 echo "The database will now rebuild from initialization scripts in ./test_db"
-docker-compose up -d mysql
+docker compose up -d mysql
 
 echo ""
 echo "Database reset complete! The container is now rebuilding from ./test_db"
